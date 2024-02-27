@@ -1,0 +1,38 @@
+<!-- public/video-control.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Control</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container mt-5">
+    <h1 class="mb-4">Video Control Panel</h1>
+    <button id="nextButton" class="btn btn-primary mr-2">Next Video</button>
+    <button id="prevButton" class="btn btn-primary">Previous Video</button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    // Function to emit the 'nextVideo' event
+    const playNext = () => {
+      socket.emit('nextVideo');
+    };
+
+    // Function to emit the 'prevVideo' event
+    const playPrev = () => {
+      socket.emit('prevVideo');
+    };
+
+    // Attach click event listeners to the buttons
+    document.getElementById('nextButton').addEventListener('click', playNext);
+    document.getElementById('prevButton').addEventListener('click', playPrev);
+  </script>
+</body>
+</html>

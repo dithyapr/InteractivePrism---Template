@@ -1,0 +1,53 @@
+<!-- public/index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Player</title>
+</head>
+<body>
+  <video id="videoPlayer" controls autoplay style="width: 100vw; height: 100vh;">
+    <!-- Source will be updated dynamically -->
+    Your browser does not support the video tag.
+  </video>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    const videoPlayer = document.getElementById('videoPlayer');
+
+    // Function to play the initial video
+    const playInitialVideo = () => {
+      // Assuming that the videos array is available on the server
+      const initialVideo = '<%= videos[0] %>';
+      socket.emit('playVideo', initialVideo);
+    };
+
+    // Listen for playVideo events and update the video source
+    socket.on('playVideo', (videoSrc) => {
+      videoPlayer.src = `/videos/${videoSrc}`;
+      videoPlayer.load();
+      videoPlayer.play();
+    });
+
+    // Toggle fullscreen when the video is clicked
+    videoPlayer.addEventListener('click', () => {
+      if (videoPlayer.requestFullscreen) {
+        videoPlayer.requestFullscreen();
+      } else if (videoPlayer.mozRequestFullScreen) { /* Firefox */
+        videoPlayer.mozRequestFullScreen();
+      } else if (videoPlayer.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+        videoPlayer.webkitRequestFullscreen();
+      } else if (videoPlayer.msRequestFullscreen) { /* IE/Edge */
+        videoPlayer.msRequestFullscreen();
+      }
+    });
+
+    // Play the initial video when the page loads
+    window.addEventListener('load', playInitialVideo);
+  </script>
+</body>
+</html>
